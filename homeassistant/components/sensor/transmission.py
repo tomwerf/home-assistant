@@ -27,6 +27,7 @@ DEFAULT_PORT = 9091
 
 SENSOR_TYPES = {
     'current_status': ['Status', None],
+    'download_status': ['Download Status', None],
     'download_speed': ['Down Speed', 'MB/s'],
     'upload_speed': ['Up Speed', 'MB/s']
 }
@@ -126,6 +127,8 @@ class TransmissionSensor(Entity):
                     self._state = 'Seeding'
                 elif upload == 0 and download > 0:
                     self._state = 'Downloading'
+                elif self.transmission_client.session.activeTorrentCount > 0:
+                    self._state = 'Searching'
                 else:
                     self._state = STATE_IDLE
             else:
